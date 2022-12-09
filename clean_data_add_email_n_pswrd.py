@@ -35,10 +35,9 @@ def re_check(my_string: str):
 def check_len(entry: list) -> list:
 	prepared = prepare_strings(entry)
 	for cell in prepared[1:5]:								#from second line to -1
-		cell = cell.strip()
+		#	cell = cell.strip()								#doubling
 		if len(cell) < 1 or cell[0].islower() or (			#check len, first letter, letters in name,surname and city 
 			cell != prepared[3] and not re_check(cell)):
-			print('odfcsxkcsdb')
 			return False
 	'''for letter in cell: 									#another implementation of the above
 		if letter in '!@#$%^&*()_=+':						#or letter.isaplha()
@@ -52,7 +51,7 @@ def prepare_strings(my_list: list) -> list:
 	new_list = [x.strip() for x in my_list]
 	return new_list
 	
-new_header = 'EMAIL, NAME, LAST_NAME, TEL, CITY, PASSWORD\n'
+new_header = 'EMAIL, PASSWORD, NAME, LAST_NAME, TEL, CITY\n'
 names = []
 text = []
 result = []
@@ -80,10 +79,12 @@ with open ('task_file.txt', 'w') as f1, open('bad_results.txt', 'w') as f2:
 		name_surname = line[1]+line[2]
 		name_surname = name_surname.replace(' ','')
 		if name_surname in new_dict:
-			line[0] = new_dict[name_surname]
+			email = new_dict[name_surname]
 			password = pwrd(12)
-			line.append(password+'\n')
-			my_string = ', '.join(line)
+			result_line = [email]+[password]+line[1:]
+			#line.append(password+'\n')
+			my_string = ', '.join(result_line)
+			my_string += '\n'
 			result.append(my_string)
 			f1.write(my_string)
 		else:
@@ -92,6 +93,6 @@ with open ('task_file.txt', 'w') as f1, open('bad_results.txt', 'w') as f2:
 			na_data.append(my_string)
 			f2.write(my_string)
 
-with open ('good_results.txt') as f:
+with open ('task_file1.txt') as f:
 	for line in f.readlines():
 		print(line)
